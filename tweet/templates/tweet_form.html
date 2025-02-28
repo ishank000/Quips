@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}
+Chai aur Tweet - {% if form.instance.pk %}Edit{% else %}Create{% endif %} Tweet
+{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="tweet-form shadow">
+            <h2 class="text-center mb-4">
+                {% if form.instance.pk %}
+                <i class="bi bi-pencil-square text-warning me-2"></i>Edit Tweet
+                {% else %}
+                <i class="bi bi-plus-circle text-warning me-2"></i>Create Tweet
+                {% endif %}
+            </h2>
+            
+            <form method="post" enctype="multipart/form-data" class="form">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="{{ form.text.id_for_label }}" class="form-label">
+                        <i class="bi bi-chat-left-text me-2"></i>What's happening?
+                    </label>
+                    {{ form.text.errors }}
+                    <textarea name="{{ form.text.name }}" id="{{ form.text.id_for_label }}" 
+                              class="form-control" rows="4" 
+                              placeholder="Share your thoughts...">{{ form.text.value|default:'' }}</textarea>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="{{ form.photo.id_for_label }}" class="form-label">
+                        <i class="bi bi-image me-2"></i>Add Photo
+                    </label>
+                    {{ form.photo.errors }}
+                    <input type="file" name="{{ form.photo.name }}" id="{{ form.photo.id_for_label }}" 
+                           class="form-control" accept="image/*">
+                    {% if form.instance.photo %}
+                    <div class="mt-2">
+                        <p class="text-info">
+                            <i class="bi bi-check-circle me-1"></i>Current image: {{ form.instance.photo.url }}
+                        </p>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="tweet-actions">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="bi bi-send-fill me-2"></i>
+                        {% if form.instance.pk %}Update{% else %}Tweet{% endif %}
+                    </button>
+                    <a href="{% url 'tweet_list' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-x-circle me-2"></i>Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
